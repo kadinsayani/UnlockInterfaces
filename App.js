@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import TouchInterface from "./TouchInterface";
+import SensorInterface from "./SensorInterface";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <TouchInterface />
+      <SensorInterface />
       <StatusBar style="auto" />
     </View>
   );

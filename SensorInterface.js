@@ -9,7 +9,7 @@ import {
   PanResponder,
 } from "react-native";
 
-export default function TouchInterface() {
+export default function SensorInterface() {
   const [locationX, setLocationX] = useState(0);
   const [locationY, setLocationY] = useState(0);
 

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,9 @@ import {
   Pressable,
   PanResponder,
   Animated,
+  ScrollView,
 } from "react-native";
+import { Gyroscope } from 'expo-sensors';
 
 const initialCans = [
   { name: "coke", x: 56.00, y: 1.33, selected: false },
@@ -36,7 +38,9 @@ export default function SensorInterface() {
   const [locationX, setLocationX] = useState(0);
   const [locationY, setLocationY] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const [shaken, setShaken] = useState(false);
+  const [addedImages, setAddedImages] = useState([]); // State to store added images
+  const [hasAddedThisShake, setHasAddedThisShake] = useState(false); // Track whether an image has been added during the current shake event
   const scaleValue = new Animated.Value(1);
 
   const startScaleAnimation = () => {
@@ -84,6 +88,35 @@ export default function SensorInterface() {
     top: 0,
   });
 
+  const handleShake = () => {
+    if (selectedImage && !hasAddedThisShake) {
+      setHasAddedThisShake(true); // Mark that an image has been added during this shake event
+      setAddedImages([...addedImages, selectedImage]); // Add the selected image to the array
+      console.log(addedImages)
+      console.log("Added an image:", selectedImage);
+    } else {
+      console.log("No image selected to add.");
+    }
+  };
+
+  useEffect(() => {
+    Gyroscope.addListener(({ x, y, z }) => {
+      if (x > 2 || y > 2 || z > 2) {
+        // The shake event occurs, which calls handleShake
+        handleShake();
+      }
+    });
+    
+    return () => {
+      Gyroscope.removeAllListeners();
+    };
+  }, [selectedImage]); // This useEffect will run when selectedImage changes
+
+  useEffect(() => {
+    // Reset hasAddedThisShake when the selected image changes
+    setHasAddedThisShake(false);
+  }, [selectedImage]);
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (event, gestureState) => true,
     onStartShouldSetPanResponderCapture: (event, gestureState) => true,
@@ -103,25 +136,42 @@ export default function SensorInterface() {
   }, [locationX, locationY]);
 
   return (
-    <View {...panResponder.panHandlers}>
-      <Image
-        source={require("./vendingMachine.png")}
-        style={{ width: 400, height: 650 }}
-      />
-      {selectedImage && (
-        <Animated.Image
-          source={selectedImage}
-          style={{
-            position: "absolute",
-            width: 150,
-            height: 150,
-            transform: [{ scale: scaleValue }],
-            ...selectedImageStyle,
-          }}
+    <View>
+      <View {...panResponder.panHandlers}>
+        <Image
+          source={require("./vendingMachine.png")}
+          style={{ width: 400, height: 650 }}
         />
-      )}
+        {selectedImage && (
+          <Animated.Image
+            source={selectedImage}
+            style={{
+              position: "absolute",
+              width: 150,
+              height: 150,
+              transform: [{ scale: scaleValue }],
+              ...selectedImageStyle,
+            }}
+          />
+        )}
+        <View style={{ position: "absolute", top: 500, left: 70, width: "100%", height: "100%" }}>
+          <ScrollView horizontal>
+            {addedImages.map((image, index) => (
+              <Image
+                key={index}
+                source={image}
+                style={{
+                  width: 70,
+                  height: 70,
+                  marginRight: 0,
+                }}
+              />
+            ))}
+          </ScrollView>
+        </View>
+      </View>
     </View>
-  );
+  );  
 }
 
 const styles = StyleSheet.create({

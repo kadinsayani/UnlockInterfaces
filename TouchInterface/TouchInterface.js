@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const PianoKey = ({ note, isBlack, isSharp, offset }) => {
+const PianoKey = ({ note, isBlack, offset }) => {
   const keyColor = isBlack ? 'black' : 'white';
   const keyTextColor = isBlack ? 'white' : 'black';
 
@@ -9,7 +9,7 @@ const PianoKey = ({ note, isBlack, isSharp, offset }) => {
     <TouchableOpacity
       style={[
         styles.key,
-        { backgroundColor: keyColor, height: isSharp ? 80 : 120, marginLeft: offset },
+        { backgroundColor: keyColor, marginLeft: offset },
         isBlack ? styles.blackKey : styles.whiteKey,
       ]}
     >
@@ -28,61 +28,61 @@ const PianoApp = () => {
     {
       isBlack: false,
       note: "C",
-
     },
     {
       isBlack: true,
       note: "C#",
-      offset: -15, // Adjust the offset for C# key
+      offset: -20,
     },
     {
       isBlack: false,
       note: "D",
-      offset: -17,
+      offset: -18,
     },
     {
       isBlack: true,
       note: "D#",
-      offset: -15,
+      offset: -20,
     },
     {
       isBlack: false,
       note: "E",
-      offset: -17,
+      offset: -18,
     },
     {
       isBlack: false,
-      note: "F"
+      note: "F",
+      offset:0,
     },
     {
       isBlack: true,
       note: "F#",
-      offset: -15,
+      offset: -18,
     },
     {
       isBlack: false,
       note: "G",
-      offset: -17,
+      offset: -20,
     },
     {
       isBlack: true,
       note: "G#",
-      offset: -15,
+      offset: -18,
     },
     {
       isBlack: false,
       note: "A",
-      offset: -17,
+      offset: -20,
     },
     {
       isBlack: true,
       note: "A#",
-      offset: -15,
+      offset: -18,
     },
     {
       isBlack: false,
       note: "B",
-      offset: -17,
+      offset: -20,
     }
   ];
 
@@ -94,7 +94,6 @@ const PianoApp = () => {
             key={key.note}
             note={key.note}
             isBlack={key.isBlack}
-            isSharp={blackKeys.includes(key.note)}
             offset={key.offset}
           />
         ))}
@@ -107,28 +106,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 1,
-    backgroundColor: 'lightgray',
+    backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 5,
   },
   piano: {
     flexDirection: 'row',
-  },
-  key: {
-    flex: 1,
-    margin: 1,
-
   },
   whiteKey: {
     backgroundColor: 'white',
     borderBottomWidth: 2,
     borderColor: 'darkgrey',
-        height: 120,
+    height: 200,
+    width: 50,
+    margin:2,
+    borderRadius:5,
   },
   blackKey: {
     backgroundColor: 'black',
-    height: 70,
-    width: 60,
+    height: 100,
+    width: 38,
+    borderRadius:5,
     zIndex: 1,
   },
   keyTextContainer: {

@@ -22,18 +22,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pianoContainer: {
-    flexDirection: 'row', // Ensure the keys are aligned horizontally
-  },
-  whiteKeyContainer: {
     flexDirection: 'row',
-    flex: 7, // Adjust the flex values as needed to achieve the desired appearance
-  },
-  blackKeyContainer: {
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
 });

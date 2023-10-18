@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const PianoKey = ({ note, isBlack }) => {
+const PianoKey = ({ note, isBlack, isSharp }) => {
   const keyColor = isBlack ? 'black' : 'white';
   const keyTextColor = isBlack ? 'white' : 'black';
 
@@ -9,8 +9,8 @@ const PianoKey = ({ note, isBlack }) => {
     <TouchableOpacity
       style={[
         styles.key,
-        { backgroundColor: keyColor },
-        isBlack ? styles.blackKey : styles.whiteKey,
+        { backgroundColor: keyColor, height: isSharp ? 80 : 120 },
+        isBlack ? styles.blackKey : styles.whiteKey, // Apply styles for both black and white keys
       ]}
     >
       <View style={styles.keyTextContainer}>
@@ -22,16 +22,69 @@ const PianoKey = ({ note, isBlack }) => {
 
 const PianoApp = () => {
   const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-  const blackKeys = ['Db', 'Eb', 'Gb', 'Ab', 'Bb'];
+  const blackKeys = ['C#', 'D#', 'F#', 'G#', 'A#'];
+
+  const keys = [
+    {
+      isBlack: false,
+      note: "C"
+    },
+    {
+      isBlack: true,
+      note: "C#"
+    },
+    {
+      isBlack: false,
+      note: "D"
+    },
+    {
+      isBlack: true,
+      note: "D#"
+    },
+    {
+      isBlack: false,
+      note: "E"
+    },
+    {
+      isBlack: false,
+      note: "F"
+    },
+    {
+      isBlack: true,
+      note: "F#"
+    },
+    {
+      isBlack: false,
+      note: "G"
+    },
+    {
+      isBlack: true,
+      note: "G#"
+    },
+    {
+      isBlack: false,
+      note: "A"
+    },
+    {
+      isBlack: true,
+      note: "A#"
+    },
+    {
+      isBlack: false,
+      note: "B"
+    }
+  ];
 
   return (
     <View style={styles.container}>
       <View style={styles.piano}>
-        {whiteKeys.map((note) => (
-          <PianoKey key={note} note={note} isBlack={false} />
-        ))}
-        {blackKeys.map((note) => (
-          <PianoKey key={note} note={note} isBlack={true} />
+        {keys.map((key, index) => (
+          <PianoKey
+            key={key.note}
+            note={key.note}
+            isBlack={key.isBlack}
+            isSharp={blackKeys.includes(key.note)}
+          />
         ))}
       </View>
     </View>
@@ -41,7 +94,7 @@ const PianoApp = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'lightgray', // Use a lighter background color
+    backgroundColor: 'lightgray',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -52,14 +105,16 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 1,
     height: 120,
-    justifyContent: 'flex-end',
   },
   whiteKey: {
-    borderBottomWidth: 5,
+    backgroundColor: 'white',
+    borderBottomWidth: 3,
     borderColor: 'black',
   },
   blackKey: {
     backgroundColor: 'black',
+    height: 80,
+    width: 60,
   },
   keyTextContainer: {
     flex: 1,

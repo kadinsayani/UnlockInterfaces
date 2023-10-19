@@ -9,6 +9,7 @@ import {
   PanResponder,
   Animated,
   ScrollView,
+  Vibration,
 } from "react-native";
 import { Gyroscope } from 'expo-sensors';
 
@@ -38,8 +39,10 @@ export default function SensorInterface() {
   const [locationX, setLocationX] = useState(0);
   const [locationY, setLocationY] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [correctPass, setCorrectPass] = useState(false);
   const [shaken, setShaken] = useState(false);
   const [addedImages, setAddedImages] = useState([]); // State to store added images
+  const [checkImages, setCheckImages] = useState([8, 1, 5, 7]); // State to store added images
   const [hasAddedThisShake, setHasAddedThisShake] = useState(false); // Track whether an image has been added during the current shake event
   const scaleValue = new Animated.Value(1);
 
@@ -117,6 +120,7 @@ export default function SensorInterface() {
     setHasAddedThisShake(false);
   }, [selectedImage]);
 
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (event, gestureState) => true,
     onStartShouldSetPanResponderCapture: (event, gestureState) => true,
@@ -134,6 +138,18 @@ export default function SensorInterface() {
   useEffect(() => {
     console.log(`${locationX}, ${locationY}`);
   }, [locationX, locationY]);
+
+  useEffect(() => {
+    // Check if addedImages and checkImages match
+    if(addedImages.length == 4){
+      if (JSON.stringify(addedImages) === JSON.stringify(checkImages)) {
+        setCorrectPass(true);
+      }else{
+        setAddedImages([]);
+        Vibration.vibrate(500);
+      }
+    }
+  }, [addedImages, checkImages]);
 
   return (
     <View>

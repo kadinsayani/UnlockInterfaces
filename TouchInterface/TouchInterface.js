@@ -16,7 +16,7 @@ const themes = {
   colorful: {
     backgroundColor: 'pink',
     keyColor: {
-      white: 'white',
+      white: '#FFF5EE',
       black: '#F33A6A',
     },
     textColor: {
@@ -25,9 +25,9 @@ const themes = {
     },
   },
   dark: {
-    backgroundColor: 'black',
+    backgroundColor: '#15369F',
     keyColor: {
-      white: 'lightblue',
+      white: '#BBCBFF',
       black: 'navy',
     },
     textColor: {

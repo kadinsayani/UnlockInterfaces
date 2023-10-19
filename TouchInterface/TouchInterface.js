@@ -17,7 +17,7 @@ const themes = {
   colorful: {
     backgroundColor: 'pink',
     keyColor: {
-      white: 'white',
+      white: '#FFF5EE',
       black: '#F33A6A',
     },
     textColor: {
@@ -26,10 +26,10 @@ const themes = {
     },
   },
   dark: {
-    backgroundColor: 'black',
+    backgroundColor: 'navy',
     keyColor: {
-      white: 'lightblue',
-      black: 'navy',
+      white: '#BBCBFF',
+      black: 'mediumblue',
     },
     textColor: {
       white: 'black',
@@ -210,8 +210,8 @@ const styles = StyleSheet.create({
   },
   themeButton: {
     padding: 10,
-    margin: 5,
-    borderRadius: 5,
+    margin: 20,
+    borderRadius: 12,
   },
   themeButtonText: {
     fontSize: 16,

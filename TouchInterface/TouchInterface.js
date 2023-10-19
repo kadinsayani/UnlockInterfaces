@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Audio } from 'expo-av';
 
 const themes = {
   classical: {
@@ -37,9 +38,40 @@ const themes = {
   },
 };
 
+const soundFileMappings = {
+  'C': require('./assets/C.mp3'),
+  'Db': require('./assets/Db.mp3'),
+  'D': require('./assets/D.mp3'),
+  'Eb': require('./assets/Eb.mp3'),
+  'E': require('./assets/E.mp3'),
+  'F': require('./assets/F.mp3'),
+  'G': require('./assets/G.mp3'),
+  'Gb': require('./assets/Gb.mp3'),
+  'A': require('./assets/A.mp3'),
+  'Ab': require('./assets/Ab.mp3'),
+  'Bb': require('./assets/Bb.mp3'),
+  'B': require('./assets/B.mp3')
+  // Add mappings for other notes
+};
+
+
+
 const PianoKey = ({ note, isBlack, offset, theme }) => {
   const keyColor = isBlack ? theme.keyColor.black : theme.keyColor.white;
   const keyTextColor = isBlack ? theme.textColor.black : theme.textColor.white;
+
+    const playSound = async () => {
+    const soundObject = new Audio.Sound();
+    try {
+
+      const soundFile = soundFileMappings[note]; // Get the sound file based on the note
+      await soundObject.loadAsync(soundFile);
+      await soundObject.playAsync();
+    } catch (error) {
+      console.log('Error playing sound:', error);
+    }
+  };
+
 
   return (
     <TouchableOpacity
@@ -48,6 +80,7 @@ const PianoKey = ({ note, isBlack, offset, theme }) => {
         { backgroundColor: keyColor, marginLeft: offset },
         isBlack ? styles.blackKey : styles.whiteKey,
       ]}
+      onPress={playSound}
     >
       <View style={styles.keyTextContainer}>
         <Text style={[styles.keyText, { color: keyTextColor }]}>{note}</Text>
@@ -60,7 +93,7 @@ const PianoApp = () => {
   const [selectedTheme, setSelectedTheme] = useState('classical'); // Default theme
 
   const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-  const blackKeys = ['C#', 'D#', 'F#', 'G#', 'A#'];
+  const blackKeys = ['Db', 'Eb', 'Gb', 'Ab', 'Bb'];
 
   const keys = [
     {
@@ -69,7 +102,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "C#",
+      note: "Db",
       offset: -20,
     },
     {
@@ -79,7 +112,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "D#",
+      note: "Eb",
       offset: -20,
     },
     {
@@ -94,7 +127,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "F#",
+      note: "Gb",
       offset: -18,
     },
     {
@@ -104,7 +137,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "G#",
+      note: "Ab",
       offset: -18,
     },
     {
@@ -114,7 +147,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "A#",
+      note: "Bb",
       offset: -18,
     },
     {

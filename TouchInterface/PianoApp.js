@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
+import { Audio } from "expo-av";
 
 const themes = {
   classical: {
@@ -37,6 +38,20 @@ const themes = {
   },
 };
 
+const soundFileMappings = {
+  C: require("./assets/C.mp3"),
+  Db: require("./assets/Db.mp3"),
+  D: require("./assets/D.mp3"),
+  Eb: require("./assets/Eb.mp3"),
+  E: require("./assets/E.mp3"),
+  F: require("./assets/F.mp3"),
+  G: require("./assets/G.mp3"),
+  Gb: require("./assets/Gb.mp3"),
+  A: require("./assets/A.mp3"),
+  Ab: require("./assets/Ab.mp3"),
+  Bb: require("./assets/Bb.mp3"),
+  B: require("./assets/B.mp3"),
+};
 const PianoApp = () => {
   const [selectedTheme, setSelectedTheme] = useState("classical");
 
@@ -55,7 +70,19 @@ const PianoApp = () => {
       ? theme.textColor.black
       : theme.textColor.white;
 
+    const playSound = async () => {
+      const soundObject = new Audio.Sound();
+      try {
+        const soundFile = soundFileMappings[note];
+        await soundObject.loadAsync(soundFile);
+        await soundObject.playAsync();
+      } catch (error) {
+        console.log("Error playing sound:", error);
+      }
+    };
+
     const handleKeyPress = () => {
+      playSound();
       if (buttonState === "set") {
         setPin((prevPin) => [...prevPin, note]);
       } else if (buttonState === "unlock") {
@@ -99,7 +126,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "C#",
+      note: "Cb",
       offset: -20,
     },
     {
@@ -109,7 +136,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "D#",
+      note: "Db",
       offset: -20,
     },
     {
@@ -124,7 +151,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "F#",
+      note: "Fb",
       offset: -18,
     },
     {
@@ -134,7 +161,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "G#",
+      note: "Gb",
       offset: -18,
     },
     {
@@ -144,7 +171,7 @@ const PianoApp = () => {
     },
     {
       isBlack: true,
-      note: "A#",
+      note: "Ab",
       offset: -18,
     },
     {

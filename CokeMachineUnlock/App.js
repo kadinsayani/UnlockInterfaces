@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import SensorInterface from "./SensorInterface";
+import CokeMachineUnlockInterface from "./CokeMachineUnlock";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <SensorInterface />
+      <CokeMachineUnlockInterface />
       <StatusBar style="auto" />
     </View>
   );

@@ -11,18 +11,18 @@ import {
   ScrollView,
   Vibration,
 } from "react-native";
-import { Gyroscope } from 'expo-sensors';
+import { Gyroscope } from "expo-sensors";
 
 const initialCans = [
-  { name: "coke", x: 56.00, y: 1.33, selected: false },
-  { name: "coke_zero", x: 123.00, y: 1.33, selected: false },
-  { name: "diet_coke", x: 196.00, y: 1.33, selected: false },
+  { name: "coke", x: 56.0, y: 1.33, selected: false },
+  { name: "coke_zero", x: 123.0, y: 1.33, selected: false },
+  { name: "diet_coke", x: 196.0, y: 1.33, selected: false },
   { name: "sprite", x: 276.67, y: 1.33, selected: false },
-  { name: "fanta", x: 55.00, y: 163.00, selected: false },
-  { name: "pepsi", x: 124.33, y: 163.00, selected: false },
-  { name: "beer", x: 197.33, y: 163.00, selected: false },
-  { name: "monster", x: 271.33, y: 163.00, selected: false },
-]
+  { name: "fanta", x: 55.0, y: 163.0, selected: false },
+  { name: "pepsi", x: 124.33, y: 163.0, selected: false },
+  { name: "beer", x: 197.33, y: 163.0, selected: false },
+  { name: "monster", x: 271.33, y: 163.0, selected: false },
+];
 
 const images = {
   coke: require("./coke.png"),
@@ -35,7 +35,7 @@ const images = {
   monster: require("./monster.png"),
 };
 
-export default function SensorInterface() {
+export default function CokeMachineUnlockInterface() {
   const [locationX, setLocationX] = useState(0);
   const [locationY, setLocationY] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -56,17 +56,14 @@ export default function SensorInterface() {
       scaleValue.setValue(1); // Reset the scale value to 1
     });
   };
-  
+
   const checkCoordinates = (x, y) => {
     for (const can of initialCans) {
-      if (
-        (x >= can.x && x <= can.x + 28.00) &&
-        (y >= can.y && y <= can.y + 125.00)
-      ) {
+      if (x >= can.x && x <= can.x + 28.0 && y >= can.y && y <= can.y + 125.0) {
         setSelectedImage(images[can.name]);
         startScaleAnimation();
         // Set the position of the selected image based on the click coordinates
-        setSelectedImagePosition(can.x +30, can.y+90);
+        setSelectedImagePosition(can.x + 30, can.y + 90);
         break; // Stop checking once you've found a match
       } else {
         setSelectedImage(null);
@@ -95,7 +92,7 @@ export default function SensorInterface() {
     if (selectedImage && !hasAddedThisShake) {
       setHasAddedThisShake(true); // Mark that an image has been added during this shake event
       setAddedImages([...addedImages, selectedImage]); // Add the selected image to the array
-      console.log(addedImages)
+      console.log(addedImages);
       console.log("Added an image:", selectedImage);
     } else {
       console.log("No image selected to add.");
@@ -109,7 +106,7 @@ export default function SensorInterface() {
         handleShake();
       }
     });
-    
+
     return () => {
       Gyroscope.removeAllListeners();
     };
@@ -119,7 +116,6 @@ export default function SensorInterface() {
     // Reset hasAddedThisShake when the selected image changes
     setHasAddedThisShake(false);
   }, [selectedImage]);
-
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (event, gestureState) => true,
@@ -131,7 +127,10 @@ export default function SensorInterface() {
     onPanResponderRelease: (event, gestureState) => {
       setLocationX(event.nativeEvent.locationX.toFixed(2));
       setLocationY(event.nativeEvent.locationY.toFixed(2));
-      checkCoordinates(event.nativeEvent.locationX.toFixed(2), event.nativeEvent.locationY.toFixed(2));
+      checkCoordinates(
+        event.nativeEvent.locationX.toFixed(2),
+        event.nativeEvent.locationY.toFixed(2)
+      );
     },
   });
 
@@ -141,10 +140,10 @@ export default function SensorInterface() {
 
   useEffect(() => {
     // Check if addedImages and checkImages match
-    if(addedImages.length == 4){
+    if (addedImages.length == 4) {
       if (JSON.stringify(addedImages) === JSON.stringify(checkImages)) {
         setCorrectPass(true);
-      }else{
+      } else {
         setAddedImages([]);
         Vibration.vibrate(500);
       }
@@ -170,7 +169,15 @@ export default function SensorInterface() {
             }}
           />
         )}
-        <View style={{ position: "absolute", top: 500, left: 70, width: "100%", height: "100%" }}>
+        <View
+          style={{
+            position: "absolute",
+            top: 500,
+            left: 70,
+            width: "100%",
+            height: "100%",
+          }}
+        >
           <ScrollView horizontal>
             {addedImages.map((image, index) => (
               <Image
@@ -187,7 +194,7 @@ export default function SensorInterface() {
         </View>
       </View>
     </View>
-  );  
+  );
 }
 
 const styles = StyleSheet.create({

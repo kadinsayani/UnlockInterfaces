@@ -1,77 +1,73 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Audio } from 'expo-av';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Audio } from "expo-av";
 
 const themes = {
   classical: {
-    backgroundColor: 'lightgray',
+    backgroundColor: "lightgray",
     keyColor: {
-      white: 'white',
-      black: 'black',
+      white: "white",
+      black: "black",
     },
     textColor: {
-      white: 'black',
-      black: 'white',
+      white: "black",
+      black: "white",
     },
   },
   colorful: {
-    backgroundColor: 'pink',
+    backgroundColor: "pink",
     keyColor: {
-      white: '#FFF5EE',
-      black: '#F33A6A',
+      white: "#FFF5EE",
+      black: "#F33A6A",
     },
     textColor: {
-      white: '#F33A6A',
-      black: 'white',
+      white: "#F33A6A",
+      black: "white",
     },
   },
   dark: {
-    backgroundColor: 'navy',
+    backgroundColor: "navy",
     keyColor: {
-      white: '#BBCBFF',
-      black: 'mediumblue',
+      white: "#BBCBFF",
+      black: "mediumblue",
     },
     textColor: {
-      white: 'black',
-      black: 'white',
+      white: "black",
+      black: "white",
     },
   },
 };
 
 const soundFileMappings = {
-  'C': require('./assets/C.mp3'),
-  'Db': require('./assets/Db.mp3'),
-  'D': require('./assets/D.mp3'),
-  'Eb': require('./assets/Eb.mp3'),
-  'E': require('./assets/E.mp3'),
-  'F': require('./assets/F.mp3'),
-  'G': require('./assets/G.mp3'),
-  'Gb': require('./assets/Gb.mp3'),
-  'A': require('./assets/A.mp3'),
-  'Ab': require('./assets/Ab.mp3'),
-  'Bb': require('./assets/Bb.mp3'),
-  'B': require('./assets/B.mp3')
+  C: require("./assets/C.mp3"),
+  Db: require("./assets/Db.mp3"),
+  D: require("./assets/D.mp3"),
+  Eb: require("./assets/Eb.mp3"),
+  E: require("./assets/E.mp3"),
+  F: require("./assets/F.mp3"),
+  G: require("./assets/G.mp3"),
+  Gb: require("./assets/Gb.mp3"),
+  A: require("./assets/A.mp3"),
+  Ab: require("./assets/Ab.mp3"),
+  Bb: require("./assets/Bb.mp3"),
+  B: require("./assets/B.mp3"),
   // Add mappings for other notes
 };
-
-
 
 const PianoKey = ({ note, isBlack, offset, theme }) => {
   const keyColor = isBlack ? theme.keyColor.black : theme.keyColor.white;
   const keyTextColor = isBlack ? theme.textColor.black : theme.textColor.white;
 
-    const playSound = async () => {
+  const playSound = async () => {
     const soundObject = new Audio.Sound();
     try {
-
       const soundFile = soundFileMappings[note]; // Get the sound file based on the note
       await soundObject.loadAsync(soundFile);
       await soundObject.playAsync();
     } catch (error) {
-      console.log('Error playing sound:', error);
+      console.log("Error playing sound:", error);
     }
   };
-
 
   return (
     <TouchableOpacity
@@ -89,11 +85,11 @@ const PianoKey = ({ note, isBlack, offset, theme }) => {
   );
 };
 
-const PianoApp = () => {
-  const [selectedTheme, setSelectedTheme] = useState('classical'); // Default theme
+const PianoUnlockInterface = () => {
+  const [selectedTheme, setSelectedTheme] = useState("classical"); // Default theme
 
-  const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-  const blackKeys = ['Db', 'Eb', 'Gb', 'Ab', 'Bb'];
+  const whiteKeys = ["C", "D", "E", "F", "G", "A", "B"];
+  const blackKeys = ["Db", "Eb", "Gb", "Ab", "Bb"];
 
   const keys = [
     {
@@ -164,7 +160,9 @@ const PianoApp = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.backgroundColor }]}
+    >
       <View style={styles.themeSelector}>
         {Object.keys(themes).map((themeName) => (
           <TouchableOpacity
@@ -172,7 +170,8 @@ const PianoApp = () => {
             style={[
               styles.themeButton,
               {
-                backgroundColor: themeName === selectedTheme ? 'white' : 'lightgray',
+                backgroundColor:
+                  themeName === selectedTheme ? "white" : "lightgray",
               },
             ]}
             onPress={() => changeTheme(themeName)}
@@ -199,13 +198,13 @@ const PianoApp = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   themeSelector: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 10,
   },
   themeButton: {
@@ -215,16 +214,16 @@ const styles = StyleSheet.create({
   },
   themeButtonText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   piano: {
-    flexDirection: 'row',
-    backgroundColor: 'black',
-    borderRadius:5,
+    flexDirection: "row",
+    backgroundColor: "black",
+    borderRadius: 5,
   },
   whiteKey: {
     borderBottomWidth: 3,
-    borderColor: 'darkgrey',
+    borderColor: "darkgrey",
     height: 200,
     width: 50,
     margin: 2,
@@ -238,13 +237,13 @@ const styles = StyleSheet.create({
   },
   keyTextContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   keyText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
-export default PianoApp;
+export default PianoUnlockInterface;

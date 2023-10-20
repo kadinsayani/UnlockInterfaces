@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TouchInterface",
-    "slug": "TouchInterface",
+    "name": "PianoUnlock",
+    "slug": "PianoUnlock",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,7 +11,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assets": ["./vendingMachine.png"],
     "assetBundlePatterns": [
       "**/*"
     ],

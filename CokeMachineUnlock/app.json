@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SensorInterface",
-    "slug": "SensorInterface",
+    "name": "CokeMachineUnlock",
+    "slug": "CokeMachineUnlock",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

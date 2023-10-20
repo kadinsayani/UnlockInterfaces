@@ -17,9 +17,9 @@ const initialCans = [
   { name: "coke_zero", x: 123.0, y: 1.33, selected: false },
   { name: "diet_coke", x: 196.0, y: 1.33, selected: false },
   { name: "sprite", x: 276.67, y: 1.33, selected: false },
-  { name: "fanta", x: 55.0, y: 163.0, selected: false },
-  { name: "pepsi", x: 124.33, y: 163.0, selected: false },
-  { name: "beer", x: 197.33, y: 163.0, selected: false },
+  { name: "nestea", x: 55.0, y: 163.0, selected: false },
+  { name: "vitamen1", x: 124.33, y: 163.0, selected: false },
+  { name: "vitamen2", x: 197.33, y: 163.0, selected: false },
   { name: "monster", x: 271.33, y: 163.0, selected: false },
 ];
 
@@ -27,10 +27,10 @@ const images = {
   coke: require("./coke.png"),
   coke_zero: require("./coke_zero.png"),
   diet_coke: require("./diet_coke.png"),
-  sprite: require("./budlight.png"),
-  fanta: require("./fanta.png"),
-  beer: require("./beer.png"),
-  pepsi: require("./bud.png"),
+  sprite: require("./sprite.png"),
+  nestea: require("./nestea.png"),
+  vitamen2: require("./vitamen2.png"),
+  vitamen1: require("./vitamen1.png"),
   monster: require("./monster.png"),
 };
 

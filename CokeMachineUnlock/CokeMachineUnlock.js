@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Gyroscope } from "expo-sensors";
 import AppDrawer from "./AppDrawer";
+import FizzlingBottle from "./FizzlingBottle"; // Import the FizzlingBottle component
 
 const initialCans = [
   { name: "coke", x: 56.0, y: 1.33, selected: false },
@@ -89,8 +90,10 @@ export default function CokeMachineUnlockInterface() {
 
   const handleShake = () => {
     if (selectedImage && !hasAddedThisShake) {
-      setHasAddedThisShake(true); // Mark that an image has been added during this shake event
-      setAddedImages([...addedImages, selectedImage]); // Add the selected image to the array
+      // Start fizzle animation when an image is added
+      setShaken(true);
+      setHasAddedThisShake(true);
+      setAddedImages([...addedImages, selectedImage]);
       console.log(addedImages);
       console.log("Added an image:", selectedImage);
     } else {
@@ -201,6 +204,11 @@ export default function CokeMachineUnlockInterface() {
               </ScrollView>
             </View>
           </View>
+          {shaken && (
+              // Render the FizzlingBottle component when `shaken` is true
+              <FizzlingBottle onAnimationComplete={() => setShaken(false)} /> //Basic implementation of FizzlingBottle FUnctionalities
+              //please implement animation centering and exiting the animation.
+          )}
         </View>
       )}
     </View>

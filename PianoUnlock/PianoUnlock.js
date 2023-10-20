@@ -1,6 +1,15 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Button,
+  Animated,
+  Easing,
+} from "react-native";
 import { Audio } from "expo-av";
+import AppDrawer from "./AppDrawer";
 
 const themes = {
   classical: {
@@ -106,18 +115,23 @@ const PianoUnlockInterface = () => {
     );
   };
 
-  const handleSetPin = () => {
+  const handleButton = () => {
     if (buttonState === "set") {
       console.log(`Pin set to ${pin}`);
       setButtonState("unlock");
     } else if (buttonState === "unlock") {
       if (enteredPin.join("") === pin.join("")) {
         setUnlocked(true);
-        setButtonState("unlocked");
+        setButtonState("lock");
         console.log("unlocked");
       } else {
         setEnteredPin([]);
+        console.log("incorrect pin");
       }
+    } else if (buttonState === "lock") {
+      setUnlocked(false);
+      setButtonState("unlock");
+      console.log("locked");
     }
   };
 
@@ -186,38 +200,49 @@ const PianoUnlockInterface = () => {
   const theme = themes[selectedTheme];
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.backgroundColor }]}
-    >
-      <View style={styles.themeSelector}>
-        {Object.keys(themes).map((themeName) => (
-          <TouchableOpacity
-            key={themeName}
-            style={[
-              styles.themeButton,
-              {
-                backgroundColor:
-                  themeName === selectedTheme ? "white" : "lightgray",
-              },
-            ]}
-            onPress={() => changeTheme(themeName)}
-          >
-            <Text style={styles.themeButtonText}>{themeName}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.piano}>
-        {keys.map((key) => (
-          <PianoKey
-            key={key.note}
-            note={key.note}
-            isBlack={key.isBlack}
-            offset={key.offset}
-            theme={theme}
-          />
-        ))}
-      </View>
-      <Button title={buttonState} onPress={handleSetPin}></Button>
+    <View>
+      {unlocked ? (
+        <View style={styles.container}>
+          <View style={styles.unlockedContainer}>
+            <AppDrawer />
+          </View>
+          <Button title={buttonState} onPress={handleButton}></Button>
+        </View>
+      ) : (
+        <View
+          style={[styles.container, { backgroundColor: theme.backgroundColor }]}
+        >
+          <View style={styles.themeSelector}>
+            {Object.keys(themes).map((themeName) => (
+              <TouchableOpacity
+                key={themeName}
+                style={[
+                  styles.themeButton,
+                  {
+                    backgroundColor:
+                      themeName === selectedTheme ? "white" : "lightgray",
+                  },
+                ]}
+                onPress={() => changeTheme(themeName)}
+              >
+                <Text style={styles.themeButtonText}>{themeName}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={styles.piano}>
+            {keys.map((key) => (
+              <PianoKey
+                key={key.note}
+                note={key.note}
+                isBlack={key.isBlack}
+                offset={key.offset}
+                theme={theme}
+              />
+            ))}
+          </View>
+          <Button title={buttonState} onPress={handleButton}></Button>
+        </View>
+      )}
     </View>
   );
 };
@@ -270,6 +295,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  unlockedContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "green",
+    borderRadius: 5,
+  },
+  unlockedText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
   },
 });
 

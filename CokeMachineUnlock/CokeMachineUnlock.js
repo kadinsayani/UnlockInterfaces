@@ -1,11 +1,9 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  Pressable,
   PanResponder,
   Animated,
   ScrollView,
@@ -151,7 +149,7 @@ export default function CokeMachineUnlockInterface() {
   }, [addedImages, checkImages]);
 
   return (
-    <View>
+    <View styles={styles.device}>
       <View {...panResponder.panHandlers}>
         <Image
           source={require("./vendingMachine.png")}
@@ -198,6 +196,10 @@ export default function CokeMachineUnlockInterface() {
 }
 
 const styles = StyleSheet.create({
+  device: {
+    width: "100vw",
+    height: "100vh",
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

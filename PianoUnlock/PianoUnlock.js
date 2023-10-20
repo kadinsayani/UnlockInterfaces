@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
 import { Audio } from "expo-av";
 
 const themes = {
@@ -26,10 +26,10 @@ const themes = {
     },
   },
   dark: {
-    backgroundColor: "navy",
+    backgroundColor: "#15369F",
     keyColor: {
       white: "#BBCBFF",
-      black: "mediumblue",
+      black: "navy",
     },
     textColor: {
       white: "black",
@@ -51,45 +51,73 @@ const soundFileMappings = {
   Ab: require("./assets/Ab.mp3"),
   Bb: require("./assets/Bb.mp3"),
   B: require("./assets/B.mp3"),
-  // Add mappings for other notes
 };
+const PianoUnlockInterface = () => {
+  const [selectedTheme, setSelectedTheme] = useState("classical");
 
-const PianoKey = ({ note, isBlack, offset, theme }) => {
-  const keyColor = isBlack ? theme.keyColor.black : theme.keyColor.white;
-  const keyTextColor = isBlack ? theme.textColor.black : theme.textColor.white;
-
-  const playSound = async () => {
-    const soundObject = new Audio.Sound();
-    try {
-      const soundFile = soundFileMappings[note]; // Get the sound file based on the note
-      await soundObject.loadAsync(soundFile);
-      await soundObject.playAsync();
-    } catch (error) {
-      console.log("Error playing sound:", error);
-    }
+  const changeTheme = (newTheme) => {
+    setSelectedTheme(newTheme);
   };
 
-  return (
-    <TouchableOpacity
-      style={[
-        styles.key,
-        { backgroundColor: keyColor, marginLeft: offset },
-        isBlack ? styles.blackKey : styles.whiteKey,
-      ]}
-      onPress={playSound}
-    >
-      <View style={styles.keyTextContainer}>
-        <Text style={[styles.keyText, { color: keyTextColor }]}>{note}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
+  const [pin, setPin] = useState([]);
+  const [buttonState, setButtonState] = useState("set");
+  const [enteredPin, setEnteredPin] = useState([]);
+  const [unlocked, setUnlocked] = useState(false);
 
-const PianoUnlockInterface = () => {
-  const [selectedTheme, setSelectedTheme] = useState("classical"); // Default theme
+  const PianoKey = ({ note, isBlack, offset, theme }) => {
+    const keyColor = isBlack ? theme.keyColor.black : theme.keyColor.white;
+    const keyTextColor = isBlack
+      ? theme.textColor.black
+      : theme.textColor.white;
 
-  const whiteKeys = ["C", "D", "E", "F", "G", "A", "B"];
-  const blackKeys = ["Db", "Eb", "Gb", "Ab", "Bb"];
+    const playSound = async () => {
+      const soundObject = new Audio.Sound();
+      try {
+        const soundFile = soundFileMappings[note];
+        await soundObject.loadAsync(soundFile);
+        await soundObject.playAsync();
+      } catch (error) {
+        console.log("Error playing sound:", error);
+      }
+    };
+
+    const handleKeyPress = () => {
+      playSound();
+      if (buttonState === "set") {
+        setPin((prevPin) => [...prevPin, note]);
+      } else if (buttonState === "unlock") {
+        setEnteredPin((prevEnteredPin) => [...prevEnteredPin, note]);
+      }
+    };
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.key,
+          { backgroundColor: keyColor, marginLeft: offset },
+          isBlack ? styles.blackKey : styles.whiteKey,
+        ]}
+        onPress={handleKeyPress}
+      >
+        <View style={styles.keyTextContainer}>
+          <Text style={[styles.keyText, { color: keyTextColor }]}>{note}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const handleSetPin = () => {
+    if (buttonState === "set") {
+      console.log(`Pin set to ${pin}`);
+      setButtonState("unlock");
+    } else if (buttonState === "unlock") {
+      if (enteredPin.join("") === pin.join("")) {
+        setUnlocked(true);
+        setButtonState("unlocked");
+        console.log("unlocked");
+      }
+    }
+  };
 
   const keys = [
     {
@@ -98,7 +126,7 @@ const PianoUnlockInterface = () => {
     },
     {
       isBlack: true,
-      note: "Db",
+      note: "Cb",
       offset: -20,
     },
     {
@@ -108,7 +136,7 @@ const PianoUnlockInterface = () => {
     },
     {
       isBlack: true,
-      note: "Eb",
+      note: "Db",
       offset: -20,
     },
     {
@@ -123,7 +151,7 @@ const PianoUnlockInterface = () => {
     },
     {
       isBlack: true,
-      note: "Gb",
+      note: "Fb",
       offset: -18,
     },
     {
@@ -133,7 +161,7 @@ const PianoUnlockInterface = () => {
     },
     {
       isBlack: true,
-      note: "Ab",
+      note: "Gb",
       offset: -18,
     },
     {
@@ -143,7 +171,7 @@ const PianoUnlockInterface = () => {
     },
     {
       isBlack: true,
-      note: "Bb",
+      note: "Ab",
       offset: -18,
     },
     {
@@ -154,10 +182,6 @@ const PianoUnlockInterface = () => {
   ];
 
   const theme = themes[selectedTheme];
-
-  const changeTheme = (newTheme) => {
-    setSelectedTheme(newTheme);
-  };
 
   return (
     <View
@@ -191,6 +215,7 @@ const PianoUnlockInterface = () => {
           />
         ))}
       </View>
+      <Button title={buttonState} onPress={handleSetPin}></Button>
     </View>
   );
 };
@@ -209,8 +234,8 @@ const styles = StyleSheet.create({
   },
   themeButton: {
     padding: 10,
-    margin: 20,
-    borderRadius: 12,
+    margin: 5,
+    borderRadius: 5,
   },
   themeButtonText: {
     fontSize: 16,

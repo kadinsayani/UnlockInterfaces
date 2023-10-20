@@ -10,6 +10,7 @@ import {
   Vibration,
 } from "react-native";
 import { Gyroscope } from "expo-sensors";
+import AppDrawer from "./AppDrawer";
 
 const initialCans = [
   { name: "coke", x: 56.0, y: 1.33, selected: false },

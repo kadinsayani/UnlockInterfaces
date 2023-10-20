@@ -150,48 +150,59 @@ export default function CokeMachineUnlockInterface() {
   }, [addedImages, checkImages]);
 
   return (
-    <View styles={styles.device}>
-      <View {...panResponder.panHandlers}>
-        <Image
-          source={require("./vendingMachine.png")}
-          style={{ width: 400, height: 650 }}
-        />
-        {selectedImage && (
-          <Animated.Image
-            source={selectedImage}
-            style={{
-              position: "absolute",
-              width: 150,
-              height: 150,
-              transform: [{ scale: scaleValue }],
-              ...selectedImageStyle,
-            }}
-          />
-        )}
-        <View
-          style={{
-            position: "absolute",
-            top: 500,
-            left: 70,
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <ScrollView horizontal>
-            {addedImages.map((image, index) => (
-              <Image
-                key={index}
-                source={image}
+    <View>
+      {correctPass ? (
+        <View style={styles.device}>
+          <View style={styles.unlockedContainer}>
+            <AppDrawer />
+          </View>
+          <Button title={buttonState} onPress={handleButton}></Button>
+        </View>
+      ) : (
+        <View styles={styles.device}>
+          <View {...panResponder.panHandlers}>
+            <Image
+              source={require("./vendingMachine.png")}
+              style={{ width: 400, height: 650 }}
+            />
+            {selectedImage && (
+              <Animated.Image
+                source={selectedImage}
                 style={{
-                  width: 70,
-                  height: 70,
-                  marginRight: 0,
+                  position: "absolute",
+                  width: 150,
+                  height: 150,
+                  transform: [{ scale: scaleValue }],
+                  ...selectedImageStyle,
                 }}
               />
-            ))}
-          </ScrollView>
+            )}
+            <View
+              style={{
+                position: "absolute",
+                top: 500,
+                left: 70,
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <ScrollView horizontal>
+                {addedImages.map((image, index) => (
+                  <Image
+                    key={index}
+                    source={image}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      marginRight: 0,
+                    }}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 }

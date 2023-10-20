@@ -115,6 +115,8 @@ const PianoUnlockInterface = () => {
         setUnlocked(true);
         setButtonState("unlocked");
         console.log("unlocked");
+      } else {
+        setEnteredPin([]);
       }
     }
   };

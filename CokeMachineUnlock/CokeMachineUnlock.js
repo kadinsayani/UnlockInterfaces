@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Gyroscope } from "expo-sensors";
 import AppDrawer from "./AppDrawer";
+import LottieView from "lottie-react-native";
 import FizzlingBottle from "./FizzlingBottle"; // Import the FizzlingBottle component
 
 const initialCans = [
@@ -45,6 +46,7 @@ export default function CokeMachineUnlockInterface() {
   const [checkImages, setCheckImages] = useState([8, 1, 5, 7]); // State to store added images
   const [hasAddedThisShake, setHasAddedThisShake] = useState(false); // Track whether an image has been added during the current shake event
   const scaleValue = new Animated.Value(1);
+  const [showAnimation, setShowAnimation] = useState(false); 
 
   const startScaleAnimation = () => {
     Animated.timing(scaleValue, {
@@ -91,8 +93,7 @@ export default function CokeMachineUnlockInterface() {
   const handleShake = () => {
     if (selectedImage && !hasAddedThisShake) {
       // Start fizzle animation when an image is added
-      setShaken(true);
-      setHasAddedThisShake(true);
+      setShowAnimation(true);
       setAddedImages([...addedImages, selectedImage]);
       console.log(addedImages);
       console.log("Added an image:", selectedImage);
@@ -101,11 +102,15 @@ export default function CokeMachineUnlockInterface() {
     }
   };
 
+
+
   useEffect(() => {
     Gyroscope.addListener(({ x, y, z }) => {
-      if (x > 2 || y > 2 || z > 2) {
+      if (x > 7|| y > 7|| z > 7) {
         // The shake event occurs, which calls handleShake
-        handleShake();
+        if (!hasAddedThisShake) {
+          handleShake();
+        }
       }
     });
 
@@ -142,7 +147,7 @@ export default function CokeMachineUnlockInterface() {
 
   useEffect(() => {
     // Check if addedImages and checkImages match
-    if (addedImages.length == 4) {
+    if (addedImages.length == 4 && showAnimation == false) {
       if (JSON.stringify(addedImages) === JSON.stringify(checkImages)) {
         setCorrectPass(true);
       } else {
@@ -150,7 +155,7 @@ export default function CokeMachineUnlockInterface() {
         Vibration.vibrate(500);
       }
     }
-  }, [addedImages, checkImages]);
+  }, [addedImages, checkImages, showAnimation]);
 
   return (
     <View>
@@ -203,12 +208,25 @@ export default function CokeMachineUnlockInterface() {
                 ))}
               </ScrollView>
             </View>
+            {showAnimation && !hasAddedThisShake && selectedImage && (
+              <LottieView
+                source={require('./assets/animation_lnz5i3ec.json')} // Specify the path to your Lottie animation JSON file
+                autoPlay
+                loop = {false}
+                style={{
+                  position: "absolute",
+                  width: 400,
+                  height: 650,
+                }}
+                onAnimationFinish={() => {
+                  // Animation has finished playing, set showAnimation to false
+                  setSelectedImage(null);
+                  setShowAnimation(false);
+                  setHasAddedThisShake(true);
+                }}
+              />
+            )}
           </View>
-          {shaken && (
-              // Render the FizzlingBottle component when `shaken` is true
-              <FizzlingBottle onAnimationComplete={() => setShaken(false)} /> //Basic implementation of FizzlingBottle FUnctionalities
-              //please implement animation centering and exiting the animation.
-          )}
         </View>
       )}
     </View>
@@ -227,3 +245,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+

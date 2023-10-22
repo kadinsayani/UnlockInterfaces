@@ -74,6 +74,7 @@ const PianoUnlockInterface = () => {
   const [buttonState, setButtonState] = useState("set");
   const [enteredPin, setEnteredPin] = useState([]);
   const [unlocked, setUnlocked] = useState(false);
+  const [error, setError] = useState(false); // New state for error message
 
   const unlockAnimation = useRef(new Animated.Value(0)).current;
 
@@ -147,9 +148,11 @@ const PianoUnlockInterface = () => {
       if (enteredPin.join("") === pin.join("")) {
         setUnlocked(true);
         setButtonState("lock");
+        setError(false); // Reset error state on successful unlock
         console.log("unlocked");
       } else {
         setEnteredPin([]);
+        setError(true); // Set error state when the wrong pin is entered
         console.log("incorrect pin");
       }
     } else if (buttonState === "lock") {
@@ -158,6 +161,7 @@ const PianoUnlockInterface = () => {
       console.log("locked");
     }
   };
+
 
   const keys = [
     {
@@ -255,6 +259,7 @@ const PianoUnlockInterface = () => {
               pressing the piano keys and clicking the "SET" button
             </Text>
           )}
+          {error && <Text style={styles.errorText}>Incorrect PIN, try again!</Text>} {/* Error message */}
           <View style={styles.themeSelector}>
             {Object.keys(themes).map((themeName) => (
               <TouchableOpacity
@@ -289,6 +294,7 @@ const PianoUnlockInterface = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -367,6 +373,11 @@ const styles = StyleSheet.create({
   },
   setButton: {
     padding: 10,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

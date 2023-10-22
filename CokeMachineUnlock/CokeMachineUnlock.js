@@ -12,7 +12,6 @@ import {
 import { Gyroscope } from "expo-sensors";
 import AppDrawer from "./AppDrawer";
 import LottieView from "lottie-react-native";
-import FizzlingBottle from "./FizzlingBottle"; // Import the FizzlingBottle component
 
 const initialCans = [
   { name: "coke", x: 56.0, y: 1.33, selected: false },
@@ -47,6 +46,7 @@ export default function CokeMachineUnlockInterface() {
   const [hasAddedThisShake, setHasAddedThisShake] = useState(false); // Track whether an image has been added during the current shake event
   const scaleValue = new Animated.Value(1);
   const [showAnimation, setShowAnimation] = useState(false); 
+  const [showWrongPinMessage, setShowWrongPinMessage] = useState(false);
 
   const startScaleAnimation = () => {
     Animated.timing(scaleValue, {
@@ -153,6 +153,12 @@ export default function CokeMachineUnlockInterface() {
       } else {
         setAddedImages([]);
         Vibration.vibrate(500);
+        setShowWrongPinMessage(true);
+  
+      // Set a timer to hide the message after 2 seconds
+        const hideMessageTimer = setTimeout(() => {
+          setShowWrongPinMessage(false);
+        }, 2000);
       }
     }
   }, [addedImages, checkImages, showAnimation]);
@@ -164,7 +170,6 @@ export default function CokeMachineUnlockInterface() {
           <View style={styles.unlockedContainer}>
             <AppDrawer />
           </View>
-          <Button title={buttonState} onPress={handleButton}></Button>
         </View>
       ) : (
         <View styles={styles.device}>
@@ -173,6 +178,11 @@ export default function CokeMachineUnlockInterface() {
               source={require("./vendingMachine.png")}
               style={{ width: 400, height: 650 }}
             />
+            {showWrongPinMessage && (
+            <View style={styles.wrongPinMessageContainer}>
+              <Text style={styles.wrongPinMessageText}>Wrong Pin</Text>
+            </View>
+          )}
             {selectedImage && (
               <Animated.Image
                 source={selectedImage}
@@ -243,6 +253,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  wrongPinMessageContainer: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    position: 'absolute',
+    top: 400, // Adjust the top position as needed
+    left: 0,
+    right: 0,
+  },
+  wrongPinMessageText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
